@@ -1,81 +1,200 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>전직 레벨업 재화 계산기</title>
 
 <style>
-:root{
-  color-scheme:dark;
-  --bg:#10131a;
-  --panel:#1a202b;
-  --line:#303b4b;
-  --text:#f3f5f8;
-  --muted:#aeb8c8;
-  --accent:#f5d90a;
+:root {
+  color-scheme: dark;
+  --bg: #10131a;
+  --panel: #1a202b;
+  --line: #303b4b;
+  --text: #f3f5f8;
+  --muted: #aeb8c8;
+  --accent: #f5d90a;
 }
-*{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
-  padding:24px
+
+* {
+  box-sizing: border-box;
 }
-main{max-width:980px;margin:auto}
-h1{font-size:clamp(24px,4vw,34px);margin:0 0 8px}
-.intro{color:var(--muted);margin:0 0 24px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
-h2{font-size:18px;margin:0 0 16px}
-.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
-input{
-  width:100%;background:#0e1218;border:1px solid var(--line);
-  border-radius:8px;color:var(--text);padding:11px;font-size:16px
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Noto Sans KR", sans-serif;
+  padding: 24px;
 }
-.wide{grid-column:1/-1}
-.results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
-.result{background:#0e1218;border:1px solid var(--line);padding:14px;border-radius:10px}
-.result span{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
-.result strong{font-size:clamp(18px,3vw,26px);overflow-wrap:anywhere}
-.highlight{border-color:#817400}
-.highlight strong{color:var(--accent)}
-button{
-  border:0;border-radius:9px;background:var(--accent);color:#171717;
-  font-weight:700;padding:12px 18px;font-size:15px;cursor:pointer;margin-top:16px
+
+main {
+  max-width: 980px;
+  margin: auto;
 }
-button.secondary{background:#303b4b;color:var(--text);margin-left:8px}
-.note{font-size:12px;line-height:1.6;color:var(--muted);margin-top:12px}
-.status{font-size:14px;color:var(--accent);margin-top:10px}
+
+h1 {
+  font-size: clamp(24px, 4vw, 34px);
+  margin: 0 0 8px;
+}
+
+.intro {
+  color: var(--muted);
+  margin: 0 0 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 0 0 16px;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+label {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  background: #0e1218;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 11px;
+  font-size: 16px;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
 
 /* 전직 차수 버튼 */
-.tier-buttons{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:8px;
-}
-.tier-button{
-  margin:0;
-  padding:13px 10px;
-  border:1px solid var(--line);
-  border-radius:8px;
-  background:#0e1218;
-  color:var(--text);
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer;
-}
-.tier-button.active{
-  background:var(--accent);
-  color:#171717;
-  border-color:var(--accent);
-}
-.tier-button:hover{border-color:var(--accent)}
 
-@media(max-width:680px){
-  body{padding:14px}
-  .grid,.fields,.results{grid-template-columns:1fr}
-  .wide{grid-column:auto}
+.tier-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tier-button {
+  margin: 0;
+  padding: 13px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #0e1218;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tier-button.active {
+  background: var(--accent);
+  color: #171717;
+  border-color: var(--accent);
+}
+
+/* 계산 결과 */
+
+.results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.result {
+  background: #0e1218;
+  border: 1px solid var(--line);
+  padding: 14px;
+  border-radius: 10px;
+}
+
+.result span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.result strong {
+  font-size: clamp(18px, 3vw, 26px);
+  overflow-wrap: anywhere;
+}
+
+.highlight {
+  border-color: #817400;
+}
+
+.highlight strong {
+  color: var(--accent);
+}
+
+button.action {
+  border: 0;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #171717;
+  font-weight: 700;
+  padding: 12px 18px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+button.secondary {
+  background: #303b4b;
+  color: var(--text);
+  margin-left: 8px;
+}
+
+.note {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-top: 12px;
+}
+
+.status {
+  font-size: 14px;
+  color: var(--accent);
+  margin-top: 10px;
+}
+
+@media (max-width: 680px) {
+  body {
+    padding: 14px;
+  }
+
+  .grid,
+  .fields,
+  .results {
+    grid-template-columns: 1fr;
+  }
+
+  .wide {
+    grid-column: auto;
+  }
 }
 </style>
 </head>
@@ -84,6 +203,7 @@ button.secondary{background:#303b4b;color:var(--text);margin-left:8px}
 <main>
 
 <h1>전직 레벨업 재화 계산기</h1>
+
 <p class="intro">
 전직 차수와 레벨 범위, 보유 재화 및 소탕 열쇠를 입력해 필요 재화와 열쇠를 계산합니다.
 </p>
@@ -104,11 +224,7 @@ button.secondary{background:#303b4b;color:var(--text);margin-left:8px}
 <button type="button" class="tier-button" data-tier="3">3차</button>
 </div>
 
-<select id="tier" style="display:none">
-<option value="1">1차</option>
-<option value="2">2차</option>
-<option value="3">3차</option>
-</select>
+<input type="hidden" id="tier" value="1">
 </div>
 
 <div>
@@ -135,22 +251,22 @@ button.secondary{background:#303b4b;color:var(--text);margin-left:8px}
 <div class="fields">
 
 <div>
-<label for="towerReward" id="towerRewardLabel">시련의 탑 소탕 1회 재화</label>
+<label id="towerRewardLabel" for="towerReward">시련의 탑 소탕 1회 재화</label>
 <input id="towerReward" type="number" min="0" value="0">
 </div>
 
 <div>
-<label for="towerKeys" id="towerKeysLabel">시련의 탑 보유 열쇠</label>
+<label id="towerKeysLabel" for="towerKeys">시련의 탑 보유 열쇠</label>
 <input id="towerKeys" type="number" min="0" value="0">
 </div>
 
 <div id="dungeonRewardWrap">
-<label for="dungeonReward" id="dungeonRewardLabel">보물던전 1 소탕 1회 재화</label>
+<label id="dungeonRewardLabel" for="dungeonReward">보물던전 1 소탕 1회 재화</label>
 <input id="dungeonReward" type="number" min="0" value="0">
 </div>
 
 <div id="dungeonKeysWrap">
-<label for="dungeonKeys" id="dungeonKeysLabel">보물던전 1 보유 열쇠</label>
+<label id="dungeonKeysLabel" for="dungeonKeys">보물던전 1 보유 열쇠</label>
 <input id="dungeonKeys" type="number" min="0" value="0">
 </div>
 
@@ -160,6 +276,7 @@ button.secondary{background:#303b4b;color:var(--text);margin-left:8px}
 </div>
 
 <section class="panel" style="margin-top:16px">
+
 <h2>계산 결과</h2>
 
 <div class="results">
@@ -189,19 +306,23 @@ button.secondary{background:#303b4b;color:var(--text);margin-left:8px}
 <div class="status" id="status"></div>
 
 <p class="note" id="note">
-필요 재화는 현재 레벨 다음 단계부터 목표 레벨까지 비용을 합산합니다.
+현재 레벨 다음 단계부터 목표 레벨까지 필요한 재화를 합산합니다.
 </p>
 
-<button onclick="calculate()">계산하기</button>
-<button class="secondary" onclick="resetValues()">초기화</button>
+<button type="button" class="action" id="calculateButton">계산하기</button>
+<button type="button" class="action secondary" id="resetButton">초기화</button>
+
 </section>
 
 </main>
 
 <script>
 
+// =====================================
 // 1차 전직 비용 (레벨 1~95)
-const costs1=[
+// =====================================
+
+const costs1 = [
 1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,
 8000,10500,13000,15500,18000,20500,23000,25500,28000,30500,
 35000,39500,44000,48500,53000,57500,62000,66500,71000,75500,
@@ -214,8 +335,11 @@ const costs1=[
 18000000,19000000,20000000,21000000,22000000
 ];
 
+// =====================================
 // 2차 전직 비용 (레벨 0~100)
-const costs2=[
+// =====================================
+
+const costs2 = [
 1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,
 6000,6500,7000,7500,8000,8500,9000,9500,10000,11000,
 12000,13000,14000,15000,16000,17000,18000,19000,20000,25000,
@@ -229,8 +353,11 @@ const costs2=[
 560000
 ];
 
+// =====================================
 // 3차 전직 비용 (레벨 1~45)
-const costs3=[
+// =====================================
+
+const costs3 = [
 2000,4000,6000,8000,10000,12000,14000,16000,18000,20000,
 22000,24000,26000,28000,30000,34000,42000,44000,46000,48000,
 50000,60000,70000,80000,100000,110000,120000,130000,140000,150000,
@@ -238,187 +365,377 @@ const costs3=[
 600000,700000,800000,900000,1000000
 ];
 
-const n=id=>Math.max(0,Number(document.getElementById(id).value)||0);
-const fmt=num=>Math.floor(num).toLocaleString('ko-KR');
+// =====================================
+// 공통 함수
+// =====================================
 
-// 전직 차수별 설정
-function limits(){
-  const tier=document.getElementById('tier').value;
-
-  if(tier==='1') return {min:1,max:95,costs:costs1};
-  if(tier==='2') return {min:0,max:100,costs:costs2};
-
-  return {min:1,max:45,costs:costs3};
+function getNumber(id) {
+  const value = Number(document.getElementById(id).value);
+  return Number.isFinite(value) && value > 0 ? value : 0;
 }
 
-// 차수별 UI 변경
-function updateLimits(){
+function formatNumber(value) {
+  return Math.floor(value).toLocaleString('ko-KR');
+}
 
-  const tier=document.getElementById('tier').value;
-  const {min,max}=limits();
+function getTier() {
+  return document.getElementById('tier').value;
+}
 
-  const current=document.getElementById('currentLevel');
-  const target=document.getElementById('targetLevel');
+// =====================================
+// 전직별 레벨 제한 및 비용 데이터
+// =====================================
 
-  current.min=target.min=min;
-  current.max=target.max=max;
+function getLimits() {
 
-  current.value=Math.min(max,Math.max(min,Number(current.value)||min));
+  const tier = getTier();
 
-  target.value=Math.min(
-    max,
-    Math.max(Number(current.value),Number(target.value)||Number(current.value))
-  );
+  if (tier === '1') {
+    return {
+      min: 1,
+      max: 95,
+      costs: costs1
+    };
+  }
 
-  if(tier==='1'){
+  if (tier === '2') {
+    return {
+      min: 0,
+      max: 100,
+      costs: costs2
+    };
+  }
 
-    towerRewardLabel.textContent='시련의 탑 소탕 1회 재화';
-    towerKeysLabel.textContent='시련의 탑 보유 열쇠';
+  return {
+    min: 1,
+    max: 45,
+    costs: costs3
+  };
+}
 
-    dungeonRewardLabel.textContent='보물던전 1 소탕 1회 재화';
-    dungeonKeysLabel.textContent='보물던전 1 보유 열쇠';
+// =====================================
+// 전직 버튼 및 던전 명칭 변경
+// =====================================
 
-    keysNeededLabel.textContent='추가로 필요한 보물던전 1 열쇠';
+function updateTier() {
 
-    dungeonRewardWrap.style.display='';
-    dungeonKeysWrap.style.display='';
+  const tier = getTier();
+  const limits = getLimits();
 
-    note.textContent='1차 전직은 시련의 탑과 보물던전 1의 수급 재화를 반영합니다.';
+  const currentLevel = document.getElementById('currentLevel');
+  const targetLevel = document.getElementById('targetLevel');
 
-  }else if(tier==='2'){
+  currentLevel.min = limits.min;
+  currentLevel.max = limits.max;
 
-    towerRewardLabel.textContent='극한의 탑 소탕 1회 재화';
-    towerKeysLabel.textContent='극한의 탑 보유 열쇠';
+  targetLevel.min = limits.min;
+  targetLevel.max = limits.max;
 
-    dungeonRewardLabel.textContent='보물던전 2 소탕 1회 재화';
-    dungeonKeysLabel.textContent='보물던전 2 보유 열쇠';
+  let current = Number(currentLevel.value);
 
-    keysNeededLabel.textContent='추가로 필요한 보물던전 2 열쇠';
+  if (!Number.isFinite(current)) {
+    current = limits.min;
+  }
 
-    dungeonRewardWrap.style.display='';
-    dungeonKeysWrap.style.display='';
+  current = Math.min(limits.max, Math.max(limits.min, current));
 
-    note.textContent='2차 전직은 극한의 탑과 보물던전 2의 수급 재화를 반영합니다.';
+  currentLevel.value = current;
 
-  }else{
+  let target = Number(targetLevel.value);
 
-    towerRewardLabel.textContent='절망의 탑 소탕 1회 재화';
-    towerKeysLabel.textContent='절망의 탑 보유 열쇠';
+  if (!Number.isFinite(target)) {
+    target = current;
+  }
 
-    keysNeededLabel.textContent='추가로 필요한 절망의 탑 열쇠';
+  target = Math.min(limits.max, Math.max(current, target));
 
-    dungeonRewardWrap.style.display='none';
-    dungeonKeysWrap.style.display='none';
+  targetLevel.value = target;
 
-    note.textContent='3차 전직은 절망의 탑만 이용합니다.';
+  const towerRewardLabel = document.getElementById('towerRewardLabel');
+  const towerKeysLabel = document.getElementById('towerKeysLabel');
+
+  const dungeonRewardLabel = document.getElementById('dungeonRewardLabel');
+  const dungeonKeysLabel = document.getElementById('dungeonKeysLabel');
+
+  const dungeonRewardWrap = document.getElementById('dungeonRewardWrap');
+  const dungeonKeysWrap = document.getElementById('dungeonKeysWrap');
+
+  const keysNeededLabel = document.getElementById('keysNeededLabel');
+  const note = document.getElementById('note');
+
+  if (tier === '1') {
+
+    towerRewardLabel.textContent = '시련의 탑 소탕 1회 재화';
+    towerKeysLabel.textContent = '시련의 탑 보유 열쇠';
+
+    dungeonRewardLabel.textContent = '보물던전 1 소탕 1회 재화';
+    dungeonKeysLabel.textContent = '보물던전 1 보유 열쇠';
+
+    keysNeededLabel.textContent = '추가로 필요한 보물던전 1 열쇠';
+
+    dungeonRewardWrap.style.display = '';
+    dungeonKeysWrap.style.display = '';
+
+    note.textContent =
+      '1차: 보유 재화 + 시련의 탑 수급 재화 + 보물던전 1 수급 재화를 계산합니다.';
+
+  } else if (tier === '2') {
+
+    towerRewardLabel.textContent = '극한의 탑 소탕 1회 재화';
+    towerKeysLabel.textContent = '극한의 탑 보유 열쇠';
+
+    dungeonRewardLabel.textContent = '보물던전 2 소탕 1회 재화';
+    dungeonKeysLabel.textContent = '보물던전 2 보유 열쇠';
+
+    keysNeededLabel.textContent = '추가로 필요한 보물던전 2 열쇠';
+
+    dungeonRewardWrap.style.display = '';
+    dungeonKeysWrap.style.display = '';
+
+    note.textContent =
+      '2차: 보유 재화 + 극한의 탑 수급 재화 + 보물던전 2 수급 재화를 계산합니다.';
+
+  } else {
+
+    towerRewardLabel.textContent = '절망의 탑 소탕 1회 재화';
+    towerKeysLabel.textContent = '절망의 탑 보유 열쇠';
+
+    keysNeededLabel.textContent = '추가로 필요한 절망의 탑 열쇠';
+
+    dungeonRewardWrap.style.display = 'none';
+    dungeonKeysWrap.style.display = 'none';
+
+    note.textContent =
+      '3차: 보유 재화 + 절망의 탑 수급 재화만 계산합니다.';
   }
 
   calculate();
 }
 
-// 계산
-function calculate(){
+// =====================================
+// 총 수급 가능 재화 계산
+// =====================================
 
-  const tier=document.getElementById('tier').value;
-  const {min,max,costs}=limits();
+function calculate() {
 
-  const cur=Math.floor(Number(currentLevel.value));
-  const target=Math.floor(Number(targetLevel.value));
+  const tier = getTier();
+  const limits = getLimits();
 
-  let available=n('owned');
+  const currentLevel = Math.floor(
+    Number(document.getElementById('currentLevel').value)
+  );
 
-  available+=n('towerReward')*n('towerKeys');
+  const targetLevel = Math.floor(
+    Number(document.getElementById('targetLevel').value)
+  );
 
-  if(tier!=='3'){
-    available+=n('dungeonReward')*n('dungeonKeys');
+  const owned = getNumber('owned');
+
+  const towerReward = getNumber('towerReward');
+  const towerKeys = getNumber('towerKeys');
+
+  const dungeonReward = getNumber('dungeonReward');
+  const dungeonKeys = getNumber('dungeonKeys');
+
+  // 현재 보유 재화
+  let available = owned;
+
+  // 1차 전직
+  if (tier === '1') {
+
+    available += towerReward * towerKeys;
+
+    available += dungeonReward * dungeonKeys;
+
   }
 
-  if(cur<min||cur>max||target<cur||target>max){
+  // 2차 전직
+  else if (tier === '2') {
 
-    status.textContent=`레벨 범위를 확인하세요. 현재 ${min}~${max}, 목표는 현재 레벨 이상이어야 합니다.`;
+    available += towerReward * towerKeys;
 
-    ['totalAvailable','required','shortage','keysNeeded'].forEach(id=>{
-      document.getElementById(id).textContent='—';
-    });
+    available += dungeonReward * dungeonKeys;
+
+  }
+
+  // 3차 전직
+  else if (tier === '3') {
+
+    available += towerReward * towerKeys;
+
+  }
+
+  // 레벨 범위 검사
+  if (
+    !Number.isFinite(currentLevel) ||
+    !Number.isFinite(targetLevel) ||
+    currentLevel < limits.min ||
+    currentLevel > limits.max ||
+    targetLevel < currentLevel ||
+    targetLevel > limits.max
+  ) {
+
+    document.getElementById('status').textContent =
+      `레벨 범위를 확인하세요. 현재 레벨은 ${limits.min}~${limits.max}이며 목표 레벨은 현재 레벨 이상이어야 합니다.`;
+
+    document.getElementById('totalAvailable').textContent = '—';
+    document.getElementById('required').textContent = '—';
+    document.getElementById('shortage').textContent = '—';
+    document.getElementById('keysNeeded').textContent = '—';
 
     return;
   }
 
-  let need=0;
+  // 목표 레벨까지 필요 재화
+  let required = 0;
 
-  for(let level=cur+1;level<=target;level++){
+  for (
+    let level = currentLevel + 1;
+    level <= targetLevel;
+    level++
+  ) {
 
-    const index=tier==='1'?level-1:level;
-    const cost=costs[index];
+    let index;
 
-    if(cost===undefined){
-      status.textContent='해당 레벨 비용 데이터가 없습니다.';
+    if (tier === '1') {
+      index = level - 1;
+    } else {
+      index = level;
+    }
+
+    const cost = limits.costs[index];
+
+    if (cost === undefined) {
+
+      document.getElementById('status').textContent =
+        '해당 레벨의 재화 비용 데이터가 없습니다.';
+
       return;
     }
 
-    need+=cost;
+    required += cost;
   }
 
-  const short=Math.max(0,need-available);
+  // 부족 재화
+  const shortage = Math.max(0, required - available);
 
-  const reward=tier==='3'?n('towerReward'):n('dungeonReward');
+  // 추가로 필요한 열쇠 계산
+  let rewardForExtraKeys;
 
-  const keys=short===0?0:(reward>0?Math.ceil(short/reward):null);
+  if (tier === '1') {
+    rewardForExtraKeys = dungeonReward;
+  } else if (tier === '2') {
+    rewardForExtraKeys = dungeonReward;
+  } else {
+    rewardForExtraKeys = towerReward;
+  }
 
-  totalAvailable.textContent=fmt(available);
-  required.textContent=fmt(need);
-  shortage.textContent=fmt(short);
+  let keysNeeded;
 
-  keysNeeded.textContent=keys===null?'소탕 재화 입력 필요':fmt(keys)+'개';
+  if (shortage === 0) {
+    keysNeeded = 0;
+  } else if (rewardForExtraKeys > 0) {
+    keysNeeded = Math.ceil(shortage / rewardForExtraKeys);
+  } else {
+    keysNeeded = null;
+  }
 
-  status.textContent=short===0
-    ?'현재 수급 가능 재화로 목표 레벨까지 올릴 수 있습니다.'
-    :'현재 재화 기준으로 부족분을 추가 수급해야 합니다.';
+  // 결과 표시
+  document.getElementById('totalAvailable').textContent =
+    formatNumber(available);
+
+  document.getElementById('required').textContent =
+    formatNumber(required);
+
+  document.getElementById('shortage').textContent =
+    formatNumber(shortage);
+
+  document.getElementById('keysNeeded').textContent =
+    keysNeeded === null
+      ? '소탕 재화 입력 필요'
+      : formatNumber(keysNeeded) + '개';
+
+  document.getElementById('status').textContent =
+    shortage === 0
+      ? '현재 수급 가능 재화로 목표 레벨까지 올릴 수 있습니다.'
+      : '현재 재화 기준으로 부족분을 추가 수급해야 합니다.';
 }
 
+// =====================================
 // 초기화
-function resetValues(){
+// =====================================
 
-  tier.value='1';
+function resetValues() {
 
-  currentLevel.value=1;
-  targetLevel.value=1;
+  document.getElementById('tier').value = '1';
 
-  ['owned','towerReward','towerKeys','dungeonReward','dungeonKeys']
-  .forEach(id=>document.getElementById(id).value=0);
+  document.getElementById('currentLevel').value = 1;
+  document.getElementById('targetLevel').value = 1;
 
-  document.querySelectorAll('.tier-button').forEach(btn=>{
-    btn.classList.toggle('active',btn.dataset.tier==='1');
+  document.getElementById('owned').value = 0;
+
+  document.getElementById('towerReward').value = 0;
+  document.getElementById('towerKeys').value = 0;
+
+  document.getElementById('dungeonReward').value = 0;
+  document.getElementById('dungeonKeys').value = 0;
+
+  document.querySelectorAll('.tier-button').forEach(button => {
+
+    button.classList.toggle(
+      'active',
+      button.dataset.tier === '1'
+    );
+
   });
 
-  updateLimits();
+  updateTier();
 }
 
+// =====================================
 // 전직 버튼 이벤트
-document.querySelectorAll('.tier-button').forEach(button=>{
+// =====================================
 
-  button.addEventListener('click',()=>{
+document.querySelectorAll('.tier-button').forEach(button => {
 
-    const selectedTier=button.dataset.tier;
+  button.addEventListener('click', function() {
 
-    tier.value=selectedTier;
+    const selectedTier = this.dataset.tier;
 
-    document.querySelectorAll('.tier-button').forEach(btn=>{
-      btn.classList.toggle('active',btn===button);
+    document.getElementById('tier').value = selectedTier;
+
+    document.querySelectorAll('.tier-button').forEach(btn => {
+      btn.classList.toggle('active', btn === this);
     });
 
-    updateLimits();
+    updateTier();
+
   });
 
 });
 
+// =====================================
 // 입력 변경 이벤트
-document.querySelectorAll('input').forEach(el=>{
-  el.addEventListener('input',calculate);
+// =====================================
+
+document.querySelectorAll('input[type="number"]').forEach(input => {
+
+  input.addEventListener('input', calculate);
+
 });
 
+document.getElementById('calculateButton').addEventListener(
+  'click',
+  calculate
+);
+
+document.getElementById('resetButton').addEventListener(
+  'click',
+  resetValues
+);
+
 // 최초 실행
-updateLimits();
+updateTier();
 
 </script>
 </body>
