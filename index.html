@@ -6,8 +6,8 @@
 <title>전직 레벨업 재화 계산기</title>
 
 <style>
-:root {
-  color-scheme: dark;
+:root{
+  color-scheme:dark;
   --bg:#10131a;
   --panel:#1a202b;
   --line:#303b4b;
@@ -15,105 +15,67 @@
   --muted:#aeb8c8;
   --accent:#f5d90a;
 }
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
   font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif;
-  padding:24px;
+  padding:24px
 }
-main { max-width:980px; margin:auto; }
-h1 { font-size:clamp(24px,4vw,34px); margin:0 0 8px; }
-.intro { color:var(--muted); margin:0 0 24px; }
-.grid {
+main{max-width:980px;margin:auto}
+h1{font-size:clamp(24px,4vw,34px);margin:0 0 8px}
+.intro{color:var(--muted);margin:0 0 24px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+h2{font-size:18px;margin:0 0 16px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+input{
+  width:100%;background:#0e1218;border:1px solid var(--line);
+  border-radius:8px;color:var(--text);padding:11px;font-size:16px
+}
+.wide{grid-column:1/-1}
+.results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.result{background:#0e1218;border:1px solid var(--line);padding:14px;border-radius:10px}
+.result span{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+.result strong{font-size:clamp(18px,3vw,26px);overflow-wrap:anywhere}
+.highlight{border-color:#817400}
+.highlight strong{color:var(--accent)}
+button{
+  border:0;border-radius:9px;background:var(--accent);color:#171717;
+  font-weight:700;padding:12px 18px;font-size:15px;cursor:pointer;margin-top:16px
+}
+button.secondary{background:#303b4b;color:var(--text);margin-left:8px}
+.note{font-size:12px;line-height:1.6;color:var(--muted);margin-top:12px}
+.status{font-size:14px;color:var(--accent);margin-top:10px}
+
+/* 전직 차수 버튼 */
+.tier-buttons{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:16px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
 }
-.panel {
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:18px;
-}
-h2 { font-size:18px; margin:0 0 16px; }
-.fields {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-label {
-  display:block;
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:6px;
-}
-input,select {
-  width:100%;
-  background:#0e1218;
+.tier-button{
+  margin:0;
+  padding:13px 10px;
   border:1px solid var(--line);
   border-radius:8px;
-  color:var(--text);
-  padding:11px;
-  font-size:16px;
-}
-.wide { grid-column:1/-1; }
-.results {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-  margin-top:16px;
-}
-.result {
   background:#0e1218;
-  border:1px solid var(--line);
-  padding:14px;
-  border-radius:10px;
+  color:var(--text);
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
 }
-.result span {
-  display:block;
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:6px;
-}
-.result strong {
-  font-size:clamp(18px,3vw,26px);
-  overflow-wrap:anywhere;
-}
-.highlight { border-color:#817400; }
-.highlight strong { color:var(--accent); }
-button {
-  border:0;
-  border-radius:9px;
+.tier-button.active{
   background:var(--accent);
   color:#171717;
-  font-weight:700;
-  padding:12px 18px;
-  font-size:15px;
-  cursor:pointer;
-  margin-top:16px;
+  border-color:var(--accent);
 }
-button.secondary {
-  background:#303b4b;
-  color:var(--text);
-  margin-left:8px;
-}
-.note {
-  font-size:12px;
-  line-height:1.6;
-  color:var(--muted);
-  margin-top:12px;
-}
-.status {
-  font-size:14px;
-  color:var(--accent);
-  margin-top:10px;
-}
-@media(max-width:680px) {
-  body { padding:14px; }
-  .grid,.fields,.results { grid-template-columns:1fr; }
-  .wide { grid-column:auto; }
+.tier-button:hover{border-color:var(--accent)}
+
+@media(max-width:680px){
+  body{padding:14px}
+  .grid,.fields,.results{grid-template-columns:1fr}
+  .wide{grid-column:auto}
 }
 </style>
 </head>
@@ -134,11 +96,18 @@ button.secondary {
 <div class="fields">
 
 <div class="wide">
-<label for="tier">전직 차수</label>
-<select id="tier">
-<option value="1">1차 전직 (레벨 1~95)</option>
-<option value="2">2차 전직 (레벨 0~100)</option>
-<option value="3">3차 전직 (레벨 1~45)</option>
+<label>전직 차수</label>
+
+<div class="tier-buttons">
+<button type="button" class="tier-button active" data-tier="1">1차</button>
+<button type="button" class="tier-button" data-tier="2">2차</button>
+<button type="button" class="tier-button" data-tier="3">3차</button>
+</div>
+
+<select id="tier" style="display:none">
+<option value="1">1차</option>
+<option value="2">2차</option>
+<option value="3">3차</option>
 </select>
 </div>
 
@@ -191,7 +160,6 @@ button.secondary {
 </div>
 
 <section class="panel" style="margin-top:16px">
-
 <h2>계산 결과</h2>
 
 <div class="results">
@@ -226,8 +194,8 @@ button.secondary {
 
 <button onclick="calculate()">계산하기</button>
 <button class="secondary" onclick="resetValues()">초기화</button>
-
 </section>
+
 </main>
 
 <script>
@@ -277,18 +245,13 @@ const fmt=num=>Math.floor(num).toLocaleString('ko-KR');
 function limits(){
   const tier=document.getElementById('tier').value;
 
-  if(tier==='1'){
-    return {min:1,max:95,costs:costs1};
-  }
-
-  if(tier==='2'){
-    return {min:0,max:100,costs:costs2};
-  }
+  if(tier==='1') return {min:1,max:95,costs:costs1};
+  if(tier==='2') return {min:0,max:100,costs:costs2};
 
   return {min:1,max:45,costs:costs3};
 }
 
-// 전직 차수별 던전 이름 및 레벨 제한 변경
+// 차수별 UI 변경
 function updateLimits(){
 
   const tier=document.getElementById('tier').value;
@@ -297,10 +260,8 @@ function updateLimits(){
   const current=document.getElementById('currentLevel');
   const target=document.getElementById('targetLevel');
 
-  current.min=min;
-  current.max=max;
-  target.min=min;
-  target.max=max;
+  current.min=target.min=min;
+  current.max=target.max=max;
 
   current.value=Math.min(max,Math.max(min,Number(current.value)||min));
 
@@ -311,66 +272,45 @@ function updateLimits(){
 
   if(tier==='1'){
 
-    document.getElementById('towerRewardLabel').textContent=
-      '시련의 탑 소탕 1회 재화';
+    towerRewardLabel.textContent='시련의 탑 소탕 1회 재화';
+    towerKeysLabel.textContent='시련의 탑 보유 열쇠';
 
-    document.getElementById('towerKeysLabel').textContent=
-      '시련의 탑 보유 열쇠';
+    dungeonRewardLabel.textContent='보물던전 1 소탕 1회 재화';
+    dungeonKeysLabel.textContent='보물던전 1 보유 열쇠';
 
-    document.getElementById('dungeonRewardLabel').textContent=
-      '보물던전 1 소탕 1회 재화';
+    keysNeededLabel.textContent='추가로 필요한 보물던전 1 열쇠';
 
-    document.getElementById('dungeonKeysLabel').textContent=
-      '보물던전 1 보유 열쇠';
+    dungeonRewardWrap.style.display='';
+    dungeonKeysWrap.style.display='';
 
-    document.getElementById('keysNeededLabel').textContent=
-      '추가로 필요한 보물던전 1 열쇠';
+    note.textContent='1차 전직은 시련의 탑과 보물던전 1의 수급 재화를 반영합니다.';
 
-    document.getElementById('dungeonRewardWrap').style.display='';
-    document.getElementById('dungeonKeysWrap').style.display='';
+  }else if(tier==='2'){
 
-    document.getElementById('note').textContent=
-      '1차 전직은 시련의 탑과 보물던전 1의 수급 재화를 반영합니다. 추가 필요 열쇠는 보물던전 1 기준으로 계산합니다.';
+    towerRewardLabel.textContent='극한의 탑 소탕 1회 재화';
+    towerKeysLabel.textContent='극한의 탑 보유 열쇠';
 
-  } else if(tier==='2'){
+    dungeonRewardLabel.textContent='보물던전 2 소탕 1회 재화';
+    dungeonKeysLabel.textContent='보물던전 2 보유 열쇠';
 
-    document.getElementById('towerRewardLabel').textContent=
-      '극한의 탑 소탕 1회 재화';
+    keysNeededLabel.textContent='추가로 필요한 보물던전 2 열쇠';
 
-    document.getElementById('towerKeysLabel').textContent=
-      '극한의 탑 보유 열쇠';
+    dungeonRewardWrap.style.display='';
+    dungeonKeysWrap.style.display='';
 
-    document.getElementById('dungeonRewardLabel').textContent=
-      '보물던전 2 소탕 1회 재화';
+    note.textContent='2차 전직은 극한의 탑과 보물던전 2의 수급 재화를 반영합니다.';
 
-    document.getElementById('dungeonKeysLabel').textContent=
-      '보물던전 2 보유 열쇠';
+  }else{
 
-    document.getElementById('keysNeededLabel').textContent=
-      '추가로 필요한 보물던전 2 열쇠';
+    towerRewardLabel.textContent='절망의 탑 소탕 1회 재화';
+    towerKeysLabel.textContent='절망의 탑 보유 열쇠';
 
-    document.getElementById('dungeonRewardWrap').style.display='';
-    document.getElementById('dungeonKeysWrap').style.display='';
+    keysNeededLabel.textContent='추가로 필요한 절망의 탑 열쇠';
 
-    document.getElementById('note').textContent=
-      '2차 전직은 극한의 탑과 보물던전 2의 수급 재화를 반영합니다. 제공된 비용이 있는 0~100레벨까지만 계산합니다.';
+    dungeonRewardWrap.style.display='none';
+    dungeonKeysWrap.style.display='none';
 
-  } else {
-
-    document.getElementById('towerRewardLabel').textContent=
-      '절망의 탑 소탕 1회 재화';
-
-    document.getElementById('towerKeysLabel').textContent=
-      '절망의 탑 보유 열쇠';
-
-    document.getElementById('keysNeededLabel').textContent=
-      '추가로 필요한 절망의 탑 열쇠';
-
-    document.getElementById('dungeonRewardWrap').style.display='none';
-    document.getElementById('dungeonKeysWrap').style.display='none';
-
-    document.getElementById('note').textContent=
-      '3차 전직은 절망의 탑만 이용합니다. 보유 재화와 절망의 탑 소탕 수급량을 반영해 추가 열쇠를 계산합니다.';
+    note.textContent='3차 전직은 절망의 탑만 이용합니다.';
   }
 
   calculate();
@@ -382,23 +322,20 @@ function calculate(){
   const tier=document.getElementById('tier').value;
   const {min,max,costs}=limits();
 
-  const cur=Math.floor(Number(document.getElementById('currentLevel').value));
-  const target=Math.floor(Number(document.getElementById('targetLevel').value));
+  const cur=Math.floor(Number(currentLevel.value));
+  const target=Math.floor(Number(targetLevel.value));
 
   let available=n('owned');
 
-  // 탑 소탕 수급 재화
   available+=n('towerReward')*n('towerKeys');
 
-  // 1차 및 2차 전직은 보물던전 재화도 반영
   if(tier!=='3'){
     available+=n('dungeonReward')*n('dungeonKeys');
   }
 
   if(cur<min||cur>max||target<cur||target>max){
 
-    document.getElementById('status').textContent=
-      `레벨 범위를 확인하세요. 현재 ${min}~${max}, 목표는 현재 레벨 이상이어야 합니다.`;
+    status.textContent=`레벨 범위를 확인하세요. 현재 ${min}~${max}, 목표는 현재 레벨 이상이어야 합니다.`;
 
     ['totalAvailable','required','shortage','keysNeeded'].forEach(id=>{
       document.getElementById(id).textContent='—';
@@ -415,10 +352,7 @@ function calculate(){
     const cost=costs[index];
 
     if(cost===undefined){
-
-      document.getElementById('status').textContent=
-        '해당 레벨 비용 데이터가 없습니다.';
-
+      status.textContent='해당 레벨 비용 데이터가 없습니다.';
       return;
     }
 
@@ -427,52 +361,58 @@ function calculate(){
 
   const short=Math.max(0,need-available);
 
-  // 3차는 절망의 탑 열쇠 기준
-  // 1차 및 2차는 보물던전 열쇠 기준
   const reward=tier==='3'?n('towerReward'):n('dungeonReward');
 
-  const keys=
-    short===0
-      ?0
-      :(reward>0?Math.ceil(short/reward):null);
+  const keys=short===0?0:(reward>0?Math.ceil(short/reward):null);
 
-  document.getElementById('totalAvailable').textContent=fmt(available);
-  document.getElementById('required').textContent=fmt(need);
-  document.getElementById('shortage').textContent=fmt(short);
+  totalAvailable.textContent=fmt(available);
+  required.textContent=fmt(need);
+  shortage.textContent=fmt(short);
 
-  document.getElementById('keysNeeded').textContent=
-    keys===null?'소탕 재화 입력 필요':fmt(keys)+'개';
+  keysNeeded.textContent=keys===null?'소탕 재화 입력 필요':fmt(keys)+'개';
 
-  document.getElementById('status').textContent=
-    short===0
-      ?'현재 수급 가능 재화로 목표 레벨까지 올릴 수 있습니다.'
-      :'현재 재화 기준으로 부족분을 추가 수급해야 합니다.';
+  status.textContent=short===0
+    ?'현재 수급 가능 재화로 목표 레벨까지 올릴 수 있습니다.'
+    :'현재 재화 기준으로 부족분을 추가 수급해야 합니다.';
 }
 
 // 초기화
 function resetValues(){
 
-  document.getElementById('tier').value='1';
+  tier.value='1';
 
-  document.getElementById('currentLevel').value=1;
-  document.getElementById('targetLevel').value=1;
+  currentLevel.value=1;
+  targetLevel.value=1;
 
-  [
-    'owned',
-    'towerReward',
-    'towerKeys',
-    'dungeonReward',
-    'dungeonKeys'
-  ].forEach(id=>{
-    document.getElementById(id).value=0;
+  ['owned','towerReward','towerKeys','dungeonReward','dungeonKeys']
+  .forEach(id=>document.getElementById(id).value=0);
+
+  document.querySelectorAll('.tier-button').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.tier==='1');
   });
 
   updateLimits();
 }
 
-// 이벤트 등록
-document.getElementById('tier').addEventListener('change',updateLimits);
+// 전직 버튼 이벤트
+document.querySelectorAll('.tier-button').forEach(button=>{
 
+  button.addEventListener('click',()=>{
+
+    const selectedTier=button.dataset.tier;
+
+    tier.value=selectedTier;
+
+    document.querySelectorAll('.tier-button').forEach(btn=>{
+      btn.classList.toggle('active',btn===button);
+    });
+
+    updateLimits();
+  });
+
+});
+
+// 입력 변경 이벤트
 document.querySelectorAll('input').forEach(el=>{
   el.addEventListener('input',calculate);
 });
